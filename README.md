@@ -3,9 +3,9 @@ Markup as CoffeeScript Without Magic
 
 _This is not real yet.  It is just a spec that I am working on implementing._
 
-DryKup is a fork of Maurice Machado's excellent [CoffeeKup](https://github.com/mauricemach/coffeekup).  Until DryKup
-has better documentation, you can study coffeeKup and check here for the differences.  I wrote a micro-book on 
-coffeekup [here](https://github.com/mark-hahn/coffeekup-intro) and I will do the same for DryKup.
+DryKup is an informal fork of Maurice Machado's excellent [CoffeeKup](https://github.com/mauricemach/coffeekup).  It is not a real fork because there is little common code. Until DryKup has better documentation, you can study coffeeKup and check here for the differences.  I wrote a micro-book on coffeekup [here](https://github.com/mark-hahn/coffeekup-intro) and I will do the same for DryKup.
+
+The dryKup github project can be found [here](https://github.com/mark-hahn/drykup).
 
 ## My apology for the weird name, DryKup
 
@@ -52,6 +52,9 @@ Executing this code will result in the property `drykup.html` containing this ..
 	</body>
 
 As you can see, the executable tag functions, `head`, `title`, and `body`, are simple functions from the dryKup module. These function declarations can get somewhat large, but you can just cut and paste the code.  Also, these only need to be defined once in a module with multiple templates.  Also, you may be surprised at how few different tags you actually use.  You can build up the definition code by just running into function undefined errors and adding them on the fly.
+
+Note that in a browser, dryKup is defined globally as `window.drykup`. And if you are really 
+brave you can make the tag functions themselves be global.  Just execute `drykup.defineGlobalTagFuncs()`.
 
 The dryKup philosophy is that the template is natural code with visible clear definitions.  This is no different than requiring variable definitions in the beginning of any source.
 
