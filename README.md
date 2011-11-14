@@ -30,11 +30,11 @@ The dryKup template code (which is actually a coffescript DSL) is 100% compatibl
 
 There are two major parts of the magic in coffeeKup.  Both consist of adding more coffeeScript to the template function source and then creating a new *compiled* function. The first magic is defining the HTML tags as functions.  The second magic is adding a hidden variable to keep the HTML results as it is generated.
 
-DryKup gets rid of this magic by explicity defining the HTML tag functions and a dryKup object instance which has the HTML variable as a property.  So nothing is hidden and everything just executes as normal coffeeScript with no compile phase.
+DryKup gets rid of this magic by explicity defining the HTML tag functions and a dryKup object instance which has a `html` property to hold the output.  So nothing is hidden and everything just executes as normal coffeeScript with no compile phase.
 
 ## Why you should use DryKup instead of CoffeeKup.
 
-The short answer is that there is no reason.  CoffeKup has it's advantages and dryKup has its.It's a matter of personal style.  If I had to pick a single reason for creating dryKup, it would be the retention of closure.
+The short answer is that there is no reason.  CoffeKup has advantages and dryKup has its own. It's a matter of personal style.  If I had to pick a single reason for creating dryKup, it would be the retention of closure.
 
 ## Example DryKup code: *The Mandatory Hello World*
 
@@ -43,7 +43,7 @@ The short answer is that there is no reason.  CoffeKup has it's advantages and d
 		title 'Hello World'
 	body ->
 
-Executing this code will result in the property drykup.html containing this ...
+Executing this code will result in the property `drykup.html` containing this ...
 
 	<head>
 		<title>Hello World</title>
@@ -53,7 +53,7 @@ Executing this code will result in the property drykup.html containing this ...
 
 As you can see, the executable tag functions, `head`, `title`, and `body`, are simple functions from the dryKup module. These function declarations can get somewhat large, but you can just cut and paste the code.  Also, these only need to be defined once in a module with multiple templates.  Also, you may be surprised at how few different tags you actually use.  You can build up the definition code by just running into function undefined errors and adding them on the fly.
 
-The dryKup philosophy is that the template is natural code with visible, clear definitions required before using.
+The dryKup philosophy is that the template is natural code with visible clear definitions.  This is no different than requiring variable definitions in the beginning of any source.
 
 ## Installing
 
@@ -63,3 +63,6 @@ The dryKup philosophy is that the template is natural code with visible, clear d
 
 There is no command-line.  No options.  Just `require` the lib and use it.
 
+## License
+
+Standard MIT license.  See `LICENSE` file.
