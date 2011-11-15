@@ -1,11 +1,13 @@
 # DryKup
 Markup as CoffeeScript Without Magic
 
-_This is not real yet.  It is just a spec that I am working on implementing._
-
 DryKup is an informal fork of Maurice Machado's excellent [CoffeeKup](https://github.com/mauricemach/coffeekup).  It is not a real fork because there is little common code. Until DryKup has better documentation, you can study coffeeKup and check here for the differences.  I wrote a micro-book on coffeekup [here](https://github.com/mark-hahn/coffeekup-intro) and I will do the same for DryKup.
 
 The dryKup github project can be found [here](https://github.com/mark-hahn/drykup).
+
+## Status: *Version -0.0*
+
+_The initial source code has just been written and hasn't even been compiled yet. it is also missing many features._
 
 ## My apology for the weird name, DryKup
 
@@ -25,6 +27,9 @@ The dryKup template code (which is actually a coffescript DSL) is 100% compatibl
 
 3) All variables in the template closure are *live* without using any `with` statement. DryKup can be used in javaScript strict mode.
 
+4) The coffeeKup source is small and efficient but the dryKup code is even tinier.  This leanness 
+is the reason I suspect it may be faster than coffeeKup.
+
 
 ## How does DryKup do this?
 
@@ -38,7 +43,7 @@ The short answer is that there is no reason.  CoffeKup has advantages and dryKup
 
 ## Example DryKup code: *The Mandatory Hello World*
 
-	{head, title, body} = drykup = require 'drykup'
+	{head, title, body} = drykup = require('drykup')()
 	head ->                     
 		title 'Hello World'
 	body ->
