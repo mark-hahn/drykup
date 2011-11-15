@@ -11,7 +11,7 @@
 
 # Values available to the `doctype` function inside a template.
 # Ex.: `doctype 'strict'`
-coffeekup.doctypes =
+doctypes =
   'default': '<!DOCTYPE html>'
   '5': '<!DOCTYPE html>'
   'xml': '<?xml version="1.0" encoding="utf-8" ?>'
@@ -56,41 +56,53 @@ merge_elements = (args...) ->
 
 # ------------------- End of constants stolen from coffeeKup ---------------------
 
-class Drykup 
-	constructor: (@html = '') ->
-	clearHtml: -> @html = ''
-	defineGlobalTagFuncs: -> if window then for func, name of dryKup then window[name] = func
+util = require('util')
+dbg = (txt, obj) -> 
+	if not obj? then obj = txt; txt = ''
+	util.puts 'DBG ---> ' + txt + '\n' + util.inspect(obj) + '\n'
 
-	nonClosingTagFunc: (tagName, args) ->
-		attrstr = innertext = innerhtml = ''
+class Drykup 
+	constructor: (@htmlOut = '') -> @indent = ''
+	clearHtml: -> @htmlOut = ''
+	defineGlobalTagFuncs: -> if window then for name, func of @ then window[name] = func
+
+	normalTag: (tagName, args) ->
+		attrstr = ''; innertext = func = null
 		for arg in args
 			switch typeof arg
 				when 'string'   then innertext = arg
-				when 'function' then innerhtml = arg()
+				when 'function' then func = arg
 				when 'object'
-					for val, name of arg
+					for name, val of arg
 						attrstr += ' ' + name + '="' + val + '"'
 				else console.log 'DryKup: invalid argument, tag ' + tagName + ', ' + arg.toString()
-		@html += '<' + tagName + attrstr + '>' + innertext + innerhtml + '</' + tagName + '>\n'
+		@htmlOut += @indent + '<' + tagName + attrstr + '>' + '\n'
+		if innertext or func
+			@indent += '  '
+			if innertext then @htmlOut += @indent + innertext + '\n'
+			if func then func()
+			@indent = @indent[0..-3]
+		@htmlOut += @indent + '</' + tagName + '>' + '\n'
 
-	selfClosingTagFunc: (tagName, args) ->
+	selfClosingTag: (tagName, args) ->
 		attrstr = ''
 		for arg in args
 			if typeof arg = 'object'
-				for val, name of arg
+				for name, val of arg
 					attrstr += ' ' + name + '="' + val.replace('"', '\\"') + '"'
 			else console.log 'Invalid drykup argument in self-closing tag: ' + arg.toString()
-		@html += '<' + tagName + attrstr + ' />'
+		@htmlOut += @indent + '<' + tagName + attrstr + ' />' + '\n'
 	
-	text: (s) -> @html += s
+	text: (s) -> @htmlOut += @indent + s
 
 drykup = -> 
-	if global then return globalDk
 	dk = new Drykup()
 	for tagName in merge_elements 'regular', 'obsolete'
-		dk[tag] = (args...) -> dk.nonClosingTagFunc tagName, args
+		do (tagName) ->
+			dk[tagName] = (args...) -> dk.normalTag tagName, args
 	for tagName in merge_elements 'void', 'obsolete_void'
-		dk[tag] = (args...) -> dk.selfClosingTagFunc tagName, args
+        do (tagName) ->
+        	dk[tagName] = (args...) -> dk.selfClosingTag tagName, args
 	dk.text = (s) -> dk.text s
 	dk
 
