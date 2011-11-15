@@ -65,45 +65,49 @@ class Drykup
 	constructor: (@htmlOut = '') -> @indent = ''
 	clearHtml: -> @htmlOut = ''
 	defineGlobalTagFuncs: -> if window then for name, func of @ then window[name] = func
+	
+	addText: (s) -> if s then @htmlOut += @indent + s + '\n'; ''
 
 	normalTag: (tagName, args) ->
 		attrstr = ''; innertext = func = null
 		for arg in args
 			switch typeof arg
-				when 'string'   then innertext = arg
+				when 'string', 'number' then innertext = arg
 				when 'function' then func = arg
 				when 'object'
 					for name, val of arg
-						attrstr += ' ' + name + '="' + val + '"'
+						attrstr += ' ' + name + '="' + val.toString().replace('"', '\\"') + '"'
 				else console.log 'DryKup: invalid argument, tag ' + tagName + ', ' + arg.toString()
 		@htmlOut += @indent + '<' + tagName + attrstr + '>' + '\n'
 		if innertext or func
 			@indent += '  '
-			if innertext then @htmlOut += @indent + innertext + '\n'
-			if func then func()
+			@addText innertext
+			@addText func?()
 			@indent = @indent[0..-3]
 		@htmlOut += @indent + '</' + tagName + '>' + '\n'
+		''
 
 	selfClosingTag: (tagName, args) ->
 		attrstr = ''
 		for arg in args
-			if typeof arg = 'object'
+			if typeof arg is 'object'
 				for name, val of arg
-					attrstr += ' ' + name + '="' + val.replace('"', '\\"') + '"'
-			else console.log 'Invalid drykup argument in self-closing tag: ' + arg.toString()
+					attrstr += ' ' + name + '="' + val.toString().replace('"', '\\"') + '"'
+			else console.log 'DryKup: invalid argument, tag ' + tagName + ', ' + arg.toString()
 		@htmlOut += @indent + '<' + tagName + attrstr + ' />' + '\n'
-	
-	text: (s) -> @htmlOut += @indent + s
+		''
 
 drykup = -> 
 	dk = new Drykup()
+	dk.doctype = (type) -> dk.addText doctypes[type]
+	dk.text    =    (s) -> dk.addText s
+	dk.coffeescript =   -> dk.addText 'coffeescript tag not implemented'
 	for tagName in merge_elements 'regular', 'obsolete'
 		do (tagName) ->
 			dk[tagName] = (args...) -> dk.normalTag tagName, args
 	for tagName in merge_elements 'void', 'obsolete_void'
         do (tagName) ->
         	dk[tagName] = (args...) -> dk.selfClosingTag tagName, args
-	dk.text = (s) -> dk.text s
 	dk
 
 if module.exports then module.exports = drykup else windows.drykup = drykup

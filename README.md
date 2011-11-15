@@ -7,7 +7,7 @@ The dryKup github project can be found [here](https://github.com/mark-hahn/dryku
 
 ## Status: *Version -0.0*
 
-_The initial source code has just been written and hasn't even been compiled yet. it is also missing many features._
+A very rough implementation works, but not ready for general usage, even as alpha.
 
 ## My apology for the weird name, DryKup
 
