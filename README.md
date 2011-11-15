@@ -35,7 +35,7 @@ is the reason I suspect it may be faster than coffeeKup.
 
 There are two major parts of the magic in coffeeKup.  Both consist of adding more coffeeScript to the template function source and then creating a new *compiled* function. The first magic is defining the HTML tags as functions.  The second magic is adding a hidden variable to keep the HTML results as it is generated.
 
-DryKup gets rid of this magic by explicity defining the HTML tag functions and a dryKup object instance which has a `html` property to hold the output.  So nothing is hidden and everything just executes as normal coffeeScript with no compile phase.
+DryKup gets rid of this magic by explicity defining the HTML tag functions and a dryKup object instance which has a `htmlOut` property to hold the output.  So nothing is hidden and everything just executes as normal coffeeScript with no compile phase.
 
 ## Why you should use DryKup instead of CoffeeKup.
 
@@ -48,7 +48,7 @@ The short answer is that there is no reason.  CoffeKup has advantages and dryKup
 		title 'Hello World'
 	body ->
 
-Executing this code will result in the property `drykup.html` containing this ...
+Executing this code will result in the property `drykup.htmlOut` containing this ...
 
 	<head>
 		<title>Hello World</title>
