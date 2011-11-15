@@ -5,9 +5,9 @@ DryKup is an informal fork of Maurice Machado's excellent [CoffeeKup](https://gi
 
 The dryKup github project can be found [here](https://github.com/mark-hahn/drykup).
 
-## Status: *Version -0.0*
+## Status: *Version 0.1*
 
-A very rough implementation works, but not ready for general usage, even as alpha.
+DryKup has only been tested on the three included test files.  I will be moving it into existing production code soon so it should get to beta status quite quickly.
 
 ## My apology for the weird name, DryKup
 
@@ -17,15 +17,24 @@ More to the point, coffeeKup has what I call *magic*. There are things going on 
 
 ## Drykup is *just* coffeeKup which is *just* coffeeScript which is *just* javaScript
 
-The dryKup template code (which is actually a coffescript DSL) is 100% compatible with the coffeeKup template function. However, the code that is required to go along with your template is not compatible.  In particular variables are contained in your closure as opposed to being passed in the compile function call.  This sometimes affects how variables are referenced in the coffeescript code in the template. Compare the ./test/coffeekup_org-sample.coffee file to the code example at coffeekup.org.
+The dryKup template code (which is actually a coffescript DSL) is almost compatible with the coffeeKup template function. Here are some differences ...
+ 
+1) Values returned from arguments with type `function` are ignored.  This is how coffeeKup used to work.  So this coffeeKup code ...
 
-## Differences between DryKup and CoffeeCup
+    a href:'/home', -> 'Go Home'
+    
+... must be replaced with the following or the *Go Home* will not be in the output. I'm not sure why anyone would put the function in there to begin with.
 
-1) There is no compile phase.  Unlike coffeeKup, drykup just runs immediately.  DryKup is a simple library that you include with your app to generate html directly by executing the dryKup *template*.  This may be a disadvantage compared to coffeeKup because coffeKup compiled templates are fast.  If you are only running a template once, then dryKup is faster because it doesn't have the compile step overhead.  There is a slim chance dryKup may be as fast even for multiple runs.  This conjecture needs to be tested.
-
-2) DryKup does not destroy the closure for the template.  This means you don't have to pass in the *locals* vars and other params to any compile function.
+	a href:'/home', 'Go Home'
+ 
+2) DryKup does not destroy the closure for the template.  This means you don't have to pass in the *locals* var or other params to any compile function.
 
 3) All variables in the template closure are *live* without using any `with` statement. DryKup can be used in javaScript strict mode.
+
+## How DryKup works compared to CoffeeCup
+
+There is no compile phase.  Unlike coffeeKup, drykup just runs immediately.  DryKup is a simple library that you include with your app to generate html directly by executing the dryKup *template*.  This may be a disadvantage compared to coffeeKup because coffeKup compiled templates are fast.  If you are only running a template once, then dryKup is faster because it doesn't have the compile step overhead.  There is a slim chance dryKup may be as fast even for multiple runs.  This conjecture needs to be tested.
+
 
 
 ## How does DryKup do this?
@@ -66,7 +75,17 @@ The dryKup philosophy is that the template is natural code with visible clear de
 
 ## Usage
 
-There is no command-line.  No options.  Just `require` the lib and use it.
+You create and instance of the `Drykup` class by calling this factory function.  See test examples for real-world usage.
+ 
+    drykup = require('drykup')(options)
+    
+`options` is not required.  If included it must be an object with optional properties.  Here are 
+some examples.
+
+    htmlOut: '<doctype xxx>'  # Initial value of the html buffer.  Defaults to ''.
+    indent:'     '            # This text is applied to the beginning of each output line.
+    expand: true              # This flag will cause all attribute and style specifications
+                              #      to use a weird shorthand languge.  I will document it soon.
 
 ## License
 
