@@ -17,18 +17,15 @@ More to the point, coffeeKup has what I call *magic*. There are things going on 
 
 ## Drykup is *just* coffeeKup which is *just* coffeeScript which is *just* javaScript
 
-The dryKup template code (which is actually a coffescript DSL) is 100% compatible with the coffeeKup template function.
+The dryKup template code (which is actually a coffescript DSL) is 100% compatible with the coffeeKup template function. However, the code that is required to go along with your template is not compatible.  In particular variables are contained in your closure as opposed to being passed in the compile function call.  This sometimes affects how variables are referenced in the coffeescript code in the template. Compare the ./test/coffeekup_org-sample.coffee file to the code example at coffeekup.org.
 
 ## Differences between DryKup and CoffeeCup
 
 1) There is no compile phase.  Unlike coffeeKup, drykup just runs immediately.  DryKup is a simple library that you include with your app to generate html directly by executing the dryKup *template*.  This may be a disadvantage compared to coffeeKup because coffeKup compiled templates are fast.  If you are only running a template once, then dryKup is faster because it doesn't have the compile step overhead.  There is a slim chance dryKup may be as fast even for multiple runs.  This conjecture needs to be tested.
 
-2) DryKup does not destroy the closure for the template.  This means you don't have to pass in the *locals* vars.
+2) DryKup does not destroy the closure for the template.  This means you don't have to pass in the *locals* vars and other params to any compile function.
 
 3) All variables in the template closure are *live* without using any `with` statement. DryKup can be used in javaScript strict mode.
-
-4) The coffeeKup source is small and efficient but the dryKup code is even tinier.  This leanness 
-is the reason I suspect it may be faster than coffeeKup.
 
 
 ## How does DryKup do this?

@@ -78,13 +78,15 @@ class Drykup
 					for name, val of arg
 						attrstr += ' ' + name + '="' + val.toString().replace('"', '\\"') + '"'
 				else console.log 'DryKup: invalid argument, tag ' + tagName + ', ' + arg.toString()
-		@htmlOut += @indent + '<' + tagName + attrstr + '>' + '\n'
-		if innertext or func
+		@htmlOut += @indent + '<' + tagName + attrstr + '>'
+		if func
+			@htmlOut += '\n'
 			@indent += '  '
 			@addText innertext
 			@addText func?()
 			@indent = @indent[0..-3]
-		@htmlOut += @indent + '</' + tagName + '>' + '\n'
+			@addText '</' + tagName + '>'
+		else @htmlOut += innertext + '</' + tagName + '>' + '\n'
 		''
 
 	selfClosingTag: (tagName, args) ->
