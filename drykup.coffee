@@ -157,7 +157,7 @@ class Drykup
 		@htmlOut = opts.htmlOut ? ''
 		@expand  = opts.expand  ? false
 		
-	setHtml: (html = '') -> @htmlOut = html
+	resetHtml: (html = '') -> @htmlOut = html
 	
 	defineGlobalTagFuncs: -> if window then for name, func of @ then window[name] = func
 	
