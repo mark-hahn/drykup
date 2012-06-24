@@ -232,5 +232,5 @@ drykup = (opts) ->
         	dk[tagName] = (args...) -> dk.selfClosingTag tagName, args
 	dk
 
-if module.exports then module.exports = drykup else windows.drykup = drykup
+if module.exports then module.exports = drykup else window.drykup = drykup
 
