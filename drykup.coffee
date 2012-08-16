@@ -6,7 +6,7 @@
   See https://github.com/mark-hahn/drykup
 ###
 
-# ------------------- Constants stolen from coffeeKup (Release 0.3.1) ---------------------
+# ------------------- Constants stolen from coffeeKup (Release 0.3.2) ---------------------
 # ----------------------------- See KOFFEECUP-LICENSE file --------------------------------
 
 # Values available to the `doctype` function inside a template.
@@ -125,12 +125,12 @@ expandAttrs = (v = '', styleOnly = false) ->
 	
 expandStyle = (v) ->
 	s = ''
-	while parts = v.match ///^ ([^{]*) \{ ([^}]*) \} ([\s\S]*) $///
+	while parts = v.match(///^ ([^{]*) \{ ([^}]*) \} ([\s\S]*) $///)
 		[x, pfx, style, v] = parts
 		s += pfx + '{' + expandAttrs(style, true) + '}'
 	s + v
 
-extendX = (newSpecStrs = {}, oldSpecStrs) -> 
+extendX = (newSpecStrs = {}, oldSpecStrs = {}) -> 
 	for key, newSpecStr of newSpecStrs
 		if not (oldSpecStr = oldSpecStrs[key]) then oldSpecStrs[key] = newSpecStr; continue
 		specsObj = {}
@@ -145,11 +145,6 @@ extendX = (newSpecStrs = {}, oldSpecStrs) ->
 	oldSpecStrs
 
 # -------------------------------- main drykup code ------------------------------
-
-util = require('util')
-dbg = (txt, obj) -> 
-	if not obj? then obj = txt; txt = ''
-	util.puts 'DBG ---> ' + txt + '\n' + util.inspect(obj) + '\n'
 
 class Drykup 
 	constructor: (opts = {}) -> 
@@ -167,13 +162,18 @@ class Drykup
 		attrstr = ''
 		for name, val of obj
 			if @expand and name is 'x' then attrstr += @attrStr expandAttrs val
-			else attrstr += ' ' + name + '="' + val.toString().replace('"', '\\"') + '"'
+			else 
+				vstr = val.toString()
+				q = (if vstr.indexOf('"') isnt -1 then "'" else '"')
+				attrstr += ' ' + name + '=' + q +  vstr + q
 		attrstr
 
 	normalTag: (tagName, args) ->
-		attrstr = ''; innertext = func = null
+		attrstr = innertext = ''
+		func = null
 		for arg in args
 			switch typeof arg
+				when 'undefined','null' then continue
 				when 'string', 'number' then innertext = arg
 				when 'function' 		then func = arg
 				when 'object'   		then attrstr += @attrStr arg
@@ -192,16 +192,18 @@ class Drykup
 	selfClosingTag: (tagName, args) ->
 		attrstr = ''
 		for arg in args
+			if not arg? then continue
 			if typeof arg is 'object' then attrstr += @attrStr arg
 			else console.log 'DryKup: invalid argument, tag ' + tagName + ', ' + arg.toString()
 		@addText '<' + tagName + attrstr + ' />' + '\n'
 
 	styleFunc: (str) ->
 		if typeof str isnt 'string'
-			console.log 'DryKup: invalid argument, tag style, ' + str.toString(); return
+#			console.log 'DryKup: invalid argument, tag style, ' + str.toString()
+			return
 		@addText '<style>' + (if @expand then expandStyle str else str)+'\n' + @indent + '</style>'
 
-	extendX: (newSpecStrs = {}, oldSpecStrs) -> 
+	extendX: (newSpecStrs = {}, oldSpecStrs = {}) -> 
     	for key, newSpecStr of newSpecStrs
     		if not (oldSpecStr = oldSpecStrs[key]) then oldSpecStrs[key] = newSpecStr; continue
     		specsObj = {}
@@ -231,6 +233,11 @@ drykup = (opts) ->
 		do (tagName) ->
         	dk[tagName] = (args...) -> dk.selfClosingTag tagName, args
 	dk
+	
+drykup.extendX = extendX
 
-if module.exports then module.exports = drykup else window.drykup = drykup
-
+if module?.exports
+	module.exports = drykup
+else 
+	window.drykup = drykup
+	
