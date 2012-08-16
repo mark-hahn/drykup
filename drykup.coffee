@@ -86,7 +86,7 @@ styleValueAliases =
 	'v:v':'visibility:visible', 'v:h':'visibility:hidden'
 
 styleAliases = 
-	l:'left', t:'top', r:'right', w:'width', h:'height', c:'color', bc:'background-color'
+	l:'left', t:'top', r:'right', w:'width', h:'height', c:'color', bc:'background-color', bot:'bottom'
 	fs:'font-size', lh:'line-height', zi:'z-index'
 	b:'border', bl:'border-left', bt:'border-top', br:'border-right', bb:'border-bottom'
 	m:'margin', ml:'margin-left', mt:'margin-top', mr:'margin-right', mb:'margin-bottom'
@@ -115,8 +115,8 @@ expandAttrs = (v = '', styleOnly = false) ->
 			if (sva = styleValueAliases[part]) then [name, value] = sva.split ':'
 			else 
 				if (sa = styleAliases[name]) then name = sa
-				if name != 'z-index' and /^-?\d+$/.test value then value = value + 'px'
-				else value = whiteSpace value
+				if name != 'z-index' and /^(-|\+)?(\d|\.)+$/.test value then value = value + 'px'
+				else value = whiteSpace value 
 			styles[name] = value
 	style = ("#{k}:#{v}" for k, v of styles).join '; '
 	if styleOnly then return style
@@ -240,4 +240,3 @@ if module?.exports
 	module.exports = drykup
 else 
 	window.drykup = drykup
-	
