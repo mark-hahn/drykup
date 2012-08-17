@@ -115,7 +115,8 @@ expandAttrs = (v = '', styleOnly = false) ->
 			if (sva = styleValueAliases[part]) then [name, value] = sva.split ':'
 			else 
 				if (sa = styleAliases[name]) then name = sa
-				if name != 'z-index' and /^(-|\+)?(\d|\.)+$/.test value then value = value + 'px'
+				if name not in ['z-index','opacity'] and 
+					/^(-|\+)?(\d|\.)+$/.test value then value = value + 'px'
 				else value = whiteSpace value 
 			styles[name] = value
 	style = ("#{k}:#{v}" for k, v of styles).join '; '
@@ -240,3 +241,4 @@ if module?.exports
 	module.exports = drykup
 else 
 	window.drykup = drykup
+	
