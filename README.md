@@ -1,13 +1,13 @@
 # DryKup
-Markup as CoffeeScript Without Magic
+Markup as CoffeeScript Without Magic -- Supports Closures
 
 DryKup is an informal fork of Maurice Machado's excellent [CoffeeKup](https://github.com/mauricemach/coffeekup).  It is not a real fork because there is little common code. Until DryKup has better documentation, you can study coffeeKup and check here for the differences.  I wrote a micro-book on coffeekup [here](https://github.com/mark-hahn/coffeekup-intro) and I will do the same for DryKup.
 
 The dryKup github project can be found [here](https://github.com/mark-hahn/drykup).
 
-## Status: *Version 0.1*
+## Status:
 
-DryKup has only been tested on the three included test files.  I will be moving it into existing production code soon so it should get to beta status quite quickly.
+DryKup has been in production for a year.  There are few updates because it was pretty much finished when it was released on GitHub.  Right now the testing is virtually non-existent.  The three test files must be manually verified.
 
 ## My apology for the weird name, DryKup
 
