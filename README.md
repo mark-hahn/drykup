@@ -1,4 +1,10 @@
 # DryKup
+
+DryKup has been replaced by the superior but mostly compatible [teacup](https://github.com/goodeggs/teacup).
+---
+
+The following readme  is for historical purposes only.
+--
 Markup as CoffeeScript Without Magic -- Supports Closures
 
 DryKup is an informal fork of Maurice Machado's excellent [CoffeeKup](https://github.com/mauricemach/coffeekup).  It is not a real fork because there is little common code. Until DryKup has better documentation, you can study coffeeKup and check here for the differences.  I wrote a micro-book on coffeekup [here](https://github.com/mark-hahn/coffeekup-intro) and I will do the same for DryKup.
